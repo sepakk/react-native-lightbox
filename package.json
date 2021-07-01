@@ -1,6 +1,6 @@
 {
-  "name": "react-native-lightbox",
-  "version": "0.8.1",
+  "name": "react-native-lightbox-with-print-button",
+  "version": "0.8.2",
   "description": "Images etc in Full Screen Lightbox Popovers for React Native",
   "main": "Lightbox.js",
   "scripts": {
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://oblador@github.com/oblador/react-native-lightbox.git"
+    "url": "git+https://oblador@github.com/oblador/react-native-lightbox.git"
   },
   "author": "Joel Arvidsson <joel@oblador.se>",
   "license": "MIT",
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/oblador/react-native-lightbox",
   "dependencies": {
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react-native-linear-gradient": "^2.5.6"
   }
 }

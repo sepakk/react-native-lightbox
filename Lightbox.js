@@ -20,15 +20,19 @@ export default class Lightbox extends Component {
       friction:      PropTypes.number,
     }),
     swipeToDismiss:  PropTypes.bool,
+    showPrintButton:  PropTypes.bool,
+    printButtonCallback:  PropTypes.func,
   };
 
   static defaultProps = {
     swipeToDismiss: true,
+    showPrintButton: false,
     onOpen: () => {},
     didOpen: () => {},
     willClose: () => {},
     onClose: () => {},
     onLongPress: () => {},
+    printButtonCallback: () => {},
   };
 
   state = {
@@ -65,6 +69,8 @@ export default class Lightbox extends Component {
     didOpen: this.props.didOpen,
     willClose: this.props.willClose,
     onClose: this.onClose,
+    showPrintButton:  this.props.showPrintButton,
+    printButtonCallback:  this.props.printButtonCallback,
   })
 
   open = () => {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, Dimensions, Modal, PanResponder, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { Animated, Image, Dimensions, Modal, PanResponder, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const WINDOW_WIDTH = Dimensions.get('window').width;
@@ -65,6 +66,8 @@ export default class LightboxOverlay extends Component {
     onClose:         PropTypes.func,
     willClose:         PropTypes.func,
     swipeToDismiss:  PropTypes.bool,
+    showPrintButton:  PropTypes.bool,
+    printButtonCallback:  PropTypes.func,
   };
 
   static defaultProps = {
@@ -246,6 +249,24 @@ export default class LightboxOverlay extends Component {
         {background}
         {content}
         {header}
+        { this.props.showPrintButton == true &&
+          <TouchableOpacity 
+            onPress={()=>{
+              if(this.props.printButtonCallback){
+                this.props.printButtonCallback()
+              }
+            }}
+          style={{position: 'absolute', alignItems: 'center', justifyContent: 'center', bottom: 0, left: 0, right: 0, height: 60}}>
+            <LinearGradient style={{width: '100%', height: 60, flex: 1}} colors={['#00000000', '#000000']} >
+              <Image
+                  style={{height: '80%', alignSelf: 'center'}}
+                  resizeMode={'contain'}
+                  source={require('./assets/print.png')}
+                />
+            </LinearGradient>
+          </TouchableOpacity>
+
+        }
       </Modal>
     );
   }
