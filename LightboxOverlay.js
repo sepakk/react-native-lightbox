@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT,
+    width: '100%',
+    height: '100%',
   },
   open: {
     position: 'absolute',
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: WINDOW_WIDTH,
+    width: '100%',
     backgroundColor: 'transparent',
   },
   closeButton: {
@@ -87,7 +87,10 @@ export default class LightboxOverlay extends Component {
       },
       pan: new Animated.Value(0),
       openVal: new Animated.Value(0),
+      width: WINDOW_WIDTH,
+      height: WINDOW_HEIGHT,
     };
+    Dimensions.addEventListener('change', this._adjustDimensions);
     this._panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (evt, gestureState) => !this.state.isAnimating,
@@ -111,7 +114,7 @@ export default class LightboxOverlay extends Component {
             target: {
               y: gestureState.dy,
               x: gestureState.dx,
-              opacity: 1 - Math.abs(gestureState.dy / WINDOW_HEIGHT)
+              opacity: 1 - Math.abs(gestureState.dy / this.state.height)
             }
           });
           this.close();
@@ -129,6 +132,17 @@ export default class LightboxOverlay extends Component {
     if(this.props.isOpen) {
       this.open();
     }
+  }
+
+  componentWillUnmount() {
+    Dimensions.removeEventListener('change', this._adjustDimensions);
+  }
+
+  _adjustDimensions = () => {
+    this.setState({
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
+    });
   }
 
   open = () => {
@@ -209,14 +223,14 @@ export default class LightboxOverlay extends Component {
       dragStyle = {
         top: this.state.pan,
       };
-      lightboxOpacityStyle.opacity = this.state.pan.interpolate({inputRange: [-WINDOW_HEIGHT, 0, WINDOW_HEIGHT], outputRange: [0, 1, 0]});
+      lightboxOpacityStyle.opacity = this.state.pan.interpolate({inputRange: [-this.state.height, 0, this.state.height], outputRange: [0, 1, 0]});
     }
 
     const openStyle = [styles.open, {
       left:   openVal.interpolate({inputRange: [0, 1], outputRange: [origin.x, target.x]}),
       top:    openVal.interpolate({inputRange: [0, 1], outputRange: [origin.y + STATUS_BAR_OFFSET, target.y + STATUS_BAR_OFFSET]}),
-      width:  openVal.interpolate({inputRange: [0, 1], outputRange: [origin.width, WINDOW_WIDTH]}),
-      height: openVal.interpolate({inputRange: [0, 1], outputRange: [origin.height, WINDOW_HEIGHT]}),
+      width:  openVal.interpolate({inputRange: [0, 1], outputRange: [origin.width, this.state.width]}),
+      height: openVal.interpolate({inputRange: [0, 1], outputRange: [origin.height, this.state.height]}),
     }];
 
     const background = (<Animated.View style={[styles.background, { backgroundColor: backgroundColor }, lightboxOpacityStyle]}></Animated.View>);
